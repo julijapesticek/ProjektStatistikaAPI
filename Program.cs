@@ -8,7 +8,22 @@ using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
+var MyAllowAllOrigins = "_myAllowAllOrigins";
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowAllOrigins,
+                      policy =>
+                      {
+                          policy.AllowAnyOrigin()
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                      });
+});
+
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -61,7 +76,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseHttpsRedirection();
-
+app.UseCors(MyAllowAllOrigins);
 app.ConfigureApi();
 
 
